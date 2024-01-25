@@ -1,0 +1,86 @@
+
+.UserInput-input{
+
+    background-color: #1F2937;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 70%;
+    height: 50%;
+}
+
+
+
+.idea-logo-input{
+
+    margin-left: 44%;
+}
+
+.middle-heading-input{
+
+    font-size: 25px;
+    text-align: center;
+    margin-top: -3%;
+}
+
+.colas-logo-input{
+    padding-top: 2em;
+    margin-left: 1%;
+}
+
+.heading-and-logo-input{
+
+    margin-top: -5%;
+
+}
+
+.input-field-input{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    margin-top: 2%;
+}
+
+.user-inputfield-input{
+
+    position: relative;
+    width: 100%;
+    max-width: 650px;
+    font-size: 20px;
+    border-radius: 5px;
+    padding: 0.5em 0.5em;
+    padding-right: 3em;
+   
+}
+
+.icon-input{
+
+    color: black;
+    position: absolute;
+    margin-left: 50%;
+    cursor: pointer;
+}
+
+.old-user-inputs{
+
+    width: 65%;
+    height: 60%;
+    max-height: 250px;
+    background-color: #3d3e4c;
+    margin: auto;
+    margin-top: 4%;
+    border-radius: 5px;
+    overflow-y: scroll;
+    border:2px solid black;
+
+}
+
+.old-text-color-input{
+
+    padding: 2px 15px
+}
+
+
+

@@ -1,0 +1,36 @@
+
+.FinalOutput-output{
+ 
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 70%;
+    height: 50%;
+    background-color: rgb(110, 113, 116);
+
+}
+
+.label-output{
+
+    display: block;
+    padding-top: 1em;
+    padding-left: 3em;
+    font-size: 1.2em;
+}
+
+.heading-output{
+
+    text-align: center;
+    width: 35%;
+    margin: auto;
+    border-radius: 1em;
+    font-size: 2em;
+    padding-top: 0.5em;
+
+    
+}
+
+.div-label-output{
+
+    margin-top: 2em;
+}

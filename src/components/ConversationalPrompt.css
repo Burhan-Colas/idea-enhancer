@@ -1,0 +1,75 @@
+
+.ConversationalPrompt-prompt{
+
+    background-color: #E7E9EB;
+    position: absolute;
+    top: 0;
+    right: 0;
+    height: 100%;
+    width: 30%;
+     
+}
+
+.heading-prompt{
+
+    text-align: center;
+    color: #FFED00
+    /* -webkit-text-stroke-color: rgb(19, 19, 19); */
+}
+
+
+.response-background-div-prompt{
+    width: 75%;
+    height: 60%;
+    max-height: 500px;
+    background-color: #3d3e4c;
+    margin: auto;
+    margin-top: 8%;
+    border-radius: 5px;
+    overflow-y: scroll;
+    border:2px solid black;
+
+}
+
+.ai-response-prompt{
+
+    padding: 3px 15px;
+}
+
+
+.div-buttons-prompt{
+
+    margin-top: 10em;
+    margin-left: 4em;
+
+}
+
+.button-submit-prompt, .button-quit-prompt{
+
+    padding: 0.8em;
+    width: 25%;
+    margin-top: 1em;
+    border-radius: 2em;
+    border: 3px solid black;
+    font-weight: bold;
+    
+
+}
+.button-submit-prompt:hover, .button-quit-prompt:hover {
+
+    box-shadow: 0 12px 16px 0 rgba(0,0,0,0.24), 0 17px 50px 0 rgba(0,0,0,0.19);
+}
+
+.button-submit-prompt{
+
+    background-color: rgb(94, 219, 94);
+    margin-left: 5%;
+
+}
+
+.button-quit-prompt{
+
+    background-color: red;
+    margin-left: 20%;
+
+}

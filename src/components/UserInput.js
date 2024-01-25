@@ -110,7 +110,7 @@ export default function UserInput({ onAiResponse }) {
         'Content-Type': 'application/json',
       },
     };
-
+    
     try {
       const response = await fetch('http://localhost:8000/completions', options);
       const data = await response.json();

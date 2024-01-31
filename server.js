@@ -39,16 +39,37 @@
 
 //---------------------------------------------------------------------------------------------------------
 
+require('dotenv').config();
+
 const PORT = 8000
 const express = require('express')
 const cors = require('cors')
+const mysql = require("mysql");
 
 const app = express()
 
 app.use(express.json())
 app.use(cors())
 
-const API_KEY = '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'
+const connection = mysql.createConnection({
+    host: 'localhost',
+    user: 'root',
+    password: 'password',
+    database: 'innovation_ai',
+  });
+
+  app.get("/", (req, res) => {
+  const sql = "SELECT * FROM innovation_ai.ai_api_instruction";
+  connection.query(sql, (err, data) => {
+    if(err) return res.json("Error");
+    else 
+    return res.json(data);
+})
+
+  })
+
+
+const API_KEY = process.env.REACT_APP_OPENAI_API_KEY
 
 app.post('/completions', async (req, res) =>{
 

@@ -43,6 +43,10 @@
 }
 
 
+label{
+    display: block;
+}
+
 .div-buttons-prompt{
 
     margin-top: 10em;
@@ -50,7 +54,7 @@
 
 }
 
-.button-submit-prompt, .button-quit-prompt{
+.button-submit-prompt, .button-next-prompt, .button-quit-prompt{
 
     padding: 0.8em;
     width: 25%;
@@ -62,12 +66,12 @@
     
 
 }
-.button-submit-prompt:hover, .button-quit-prompt:hover {
+.button-submit-prompt:hover,.button-next-prompt, .button-quit-prompt:hover {
 
     box-shadow: 0 12px 16px 0 rgba(0,0,0,0.24), 0 17px 50px 0 rgba(0,0,0,0.19);
 }
 
-.button-submit-prompt{
+.button-submit-prompt, .button-next-prompt{
 
     background-color: rgb(94, 219, 94);
     margin-left: 5%;

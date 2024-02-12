@@ -104,6 +104,10 @@ app.get("/", async (req, res) => {
         return res.json("Error");
     }
 });
+
+
+
+
  
 const API_KEY = process.env.REACT_APP_OPENAI_API_KEY;
  
@@ -141,3 +145,4 @@ app.post('/completions', async (req, res) => {
 });
  
 app.listen(PORT, () => console.log('Your server is running on PORT ' + PORT));
+

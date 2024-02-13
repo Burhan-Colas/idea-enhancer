@@ -1,5 +1,8 @@
 
+
 // import React, { useEffect, useState } from 'react';
+// import Global from "../Global"
+
 
 // export default function ConversationalPrompt({ aiResponse }) {
 
@@ -17,36 +20,61 @@
 //   }, []);
 
 //   const getNextQuestion = () => {
+
 //     if (processType) {
-//       setCurrentNumber(prevNumber => prevNumber + 1);
+//       if ((question != null) && (question.IsMultipleChoice === 1)) {
+//         // make sure they choose a multiple choice question, if so, then continue, otherwise send an alert:
+//         if (!multipleChoiceReturn) {
+//           alert('Please select an option before moving to the next question.');
+//           return;
+//         } 
+        
+//         setCurrentNumber(prevNumber => prevNumber + 1);
+//         Global.answers.push(multipleChoiceReturn);
+//         // Reset the selection for the next question
+//         setMultipleChoiceReturn('');
+//       }
+//       else {
+//         setCurrentNumber(prevNumber => prevNumber + 1);
+//       }
 //     } else {
 //       alert('Please select a Process Type before moving to the next question.');
 //     }
 //   }
 
+//   const storeMultipleChoiceAnswer = (aAnswer) => {
+//     setMultipleChoiceReturn(aAnswer);    
+//   }
 
-//   const setButtons = (aSplit) => {
-//     //let data = this.props.data.genres;
-//     var buttonsText = [];    
   
-//     console.log("setButtons was called.");
-//     console.log("aSplit is:" + aSplit);
+//   const setButtons = (aSplit) => {
+ 
+//     var buttonsText = [];    
+ 
 //     if (aSplit == null) {
 //       return buttonsText;
 //     }
 
-//     //console.log('aSplit is:' + aSplit);
-//     // ignore the first entry because its before 1., so start i at 1
 //     for (let i = 1; i < aSplit.length; i++) {
 //       buttonsText.push(
 //         <label>
-//           <input type='radio' name='firstQuestion' value={aSplit[i]}
-//           onChange={(e) => setMultipleChoiceReturn(e.target.value)} />
+//           <input type='radio' name={currentNumber} value={aSplit[i]}  checked={multipleChoiceReturn === aSplit[i]}
+//           onChange={(e) => storeMultipleChoiceAnswer(e.target.value)} />
 //           {aSplit[i]} </label>
 //       );
 //     }
+    
   
 //     return <div>{buttonsText}</div>
+//   }
+
+//   const submitAnswers = () => {
+//     Global.answers.push(multipleChoiceReturn);
+//     for (let i = 0; i < Global.answers.length; i++) {
+//       console.log('answers[' + i + '] is:' + Global.answers[i])
+//     }
+    
+//     alert('Your answer have been submitted to the database.');
 //   }
 
 
@@ -59,31 +87,21 @@
 //     }
 //   }, [data, processType, currentNumber]);
 
-//   //console.log('question is multiple choice value is:' + question.IsMultipleChoice);
-
   
 //   if ((question != null) && (question.IsMultipleChoice === 1)) {
-//     console.log('got into currentNumber =' + currentNumber);
 //     let sAnswers = question.ItemsToAnswer;
-//     console.log('sAnswers is: ' + sAnswers);
-//     console.log('question.ItemsToAnswer is' + question.ItemsToAnswer);
-
 //     var split = sAnswers.split('.');
  
-//     console.log('array of split is now:' + split);
-
 //     for (let i = 0; i < split.length; i++) {
 //       // remove the number from the end of each string:
 //       if (i < split.length -1) {
-//         split[i] = split[i].substring(0, split[i].length - 1);
+//         split[i] = split[i].substring(0, split[i].length - 2);
 //       }
-//       console.log('split[' + i + '] is' + split[i]);
 //     }
-
 //   }
-
-
+  
 //   return (
+    
 //     <div className='ConversationalPrompt-prompt'>
 //       <h2 className='heading-prompt'>AI PROMPTS</h2>
 
@@ -100,11 +118,9 @@
 
 //       <h3 className='small-heading-prompt'>Questions:</h3>
 //       <div className='response-background-question-prompt'>
-        
-
 //         {currentNumber === 0 && (
 //           <div className='question-display-prompt'>
-//             <p>What is the Process Type of your idea?</p>
+//             <label>What is the Process Type of your idea?</label>
 //             <label>
 //               <input type='radio' name='firstQuestion' value='Revenue Generating' onChange={(e) => setProcessType(e.target.value)} /> Revenue Generating
 //             </label>
@@ -114,7 +130,7 @@
 //           </div>
 //         )}
       
-//        {(question != null) && (question.IsMultipleChoice === 0) && (
+//       {(question != null) && (question.IsMultipleChoice === 0) && (
 //           <div className='question-display-prompt'>
 //           <label>{question.Description}</label>
 //           <textarea className='textarea-answer-prompt' type='text'></textarea>
@@ -127,17 +143,16 @@
 //             <div className="Container"> {setButtons(split)}</div>
 //           </div>
 //         )}
-        
 
-//         {
-//       }
 //       </div>
+
+//       {/* <div>{Global.answers[5]}</div> */}
 
 //       <div className='div-buttons-prompt'>
 //         {currentNumber < 10 ? (
 //           <button className='button-next-prompt' onClick={getNextQuestion}>Next</button>
 //         ) : (
-//           <button className='button-submit-prompt'>Submit</button>
+//           <button className='button-submit-prompt' onClick={submitAnswers}>Submit</button>
 //         )}
 //       </div>
 //       <p>Current Number: {currentNumber}</p>
@@ -145,14 +160,13 @@
 //   );
 // }
 
-
-//----------------------------------------------------------------------------------------------------------
+//------------------------------------------------------------------------------------------------
 
 import React, { useEffect, useState } from 'react';
 import Global from "../Global"
 
 
-export default function ConversationalPrompt({ aiResponse }) {
+export default function ConversationalPrompt({ aiResponse, onAiResponse }) {
 
   const [data, setData] = useState([]);
   const [currentNumber, setCurrentNumber] = useState(0);
@@ -168,7 +182,7 @@ export default function ConversationalPrompt({ aiResponse }) {
   }, []);
 
   const getNextQuestion = () => {
-    console.log('getNextQuestion called');
+
     if (processType) {
       if ((question != null) && (question.IsMultipleChoice === 1)) {
         // make sure they choose a multiple choice question, if so, then continue, otherwise send an alert:
@@ -176,10 +190,10 @@ export default function ConversationalPrompt({ aiResponse }) {
           alert('Please select an option before moving to the next question.');
           return;
         } 
-
-        console.log("multiple choice return is:" + multipleChoiceReturn);
+        
         setCurrentNumber(prevNumber => prevNumber + 1);
         Global.answers.push(multipleChoiceReturn);
+        sendRequestToAI(question.Description, question.ItemsToAnswer, multipleChoiceReturn, question.AI_Instructions);
         // Reset the selection for the next question
         setMultipleChoiceReturn('');
       }
@@ -191,29 +205,55 @@ export default function ConversationalPrompt({ aiResponse }) {
     }
   }
 
-  const storeMultipleChoiceAnswer = (aAnswer) => {
-    console.log("storeMultipleChoiceAnswer aAnswer is:" + aAnswer);
-    // first set the context correctly, but also store the answer globally:
-    setMultipleChoiceReturn(aAnswer);
-    
+  const sendRequestToAI = async (description, itemsToAnswer, selectedOption,  AIinstructions) => {
+    console.log(description);
+    console.log(itemsToAnswer);
+    console.log(selectedOption);
+    console.log(AIinstructions);
+    const options = {
+      method: 'POST',
+      body: JSON.stringify({
+        description: description,
+        itemsToAnswer: itemsToAnswer,
+        selectedOption: selectedOption,
+        AIinstructions: AIinstructions, // Include AI instructions in the request
+      }),
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    };
+  
+    try {
+      const response = await fetch('http://localhost:8000/completions', options);
+      const data = await response.json();
+  
+      // Ensure data.choices is defined before accessing its properties
+      if (data && data.choices && data.choices.length > 0) {
+        const aiMessage = data.choices[0].message;
+        onAiResponse(aiMessage);
+      } else {
+        console.error("Invalid response format from the OpenAI API");
+      }
+    } catch (error) {
+      console.error(error);
+    }
   }
 
-  /*
-      setButtons: functions that grabs the multiple choice string from the database, and parses it.
-      The string format MUST have 1. 2. - n. in its formatting otherwise this function will return an empty array
-  */
-  const setButtons = (aSplit) => {
-    //let data = this.props.data.genres;
-    var buttonsText = [];    
+
+
+  const storeMultipleChoiceAnswer = (aAnswer) => {
+    setMultipleChoiceReturn(aAnswer);    
+  }
+
   
-    // console.log("setButtons was called.");
-    // console.log("aSplit is:" + aSplit);
+  const setButtons = (aSplit) => {
+ 
+    var buttonsText = [];    
+ 
     if (aSplit == null) {
       return buttonsText;
     }
 
-    //console.log('aSplit is:' + aSplit);
-    // ignore the first entry because its before 1., so start i at 1
     for (let i = 1; i < aSplit.length; i++) {
       buttonsText.push(
         <label>
@@ -228,13 +268,11 @@ export default function ConversationalPrompt({ aiResponse }) {
   }
 
   const submitAnswers = () => {
-    // console.log('got to submitAnswers');
     Global.answers.push(multipleChoiceReturn);
+    sendRequestToAI(multipleChoiceReturn);
     for (let i = 0; i < Global.answers.length; i++) {
       console.log('answers[' + i + '] is:' + Global.answers[i])
     }
-   
-
     
     alert('Your answer have been submitted to the database.');
   }
@@ -249,27 +287,17 @@ export default function ConversationalPrompt({ aiResponse }) {
     }
   }, [data, processType, currentNumber]);
 
-  //console.log('question is multiple choice value is:' + question.IsMultipleChoice);
-
   
   if ((question != null) && (question.IsMultipleChoice === 1)) {
-    // console.log('got into currentNumber =' + currentNumber);
     let sAnswers = question.ItemsToAnswer;
-    // console.log('sAnswers is: ' + sAnswers);
-    // console.log('question.ItemsToAnswer is' + question.ItemsToAnswer);
-
     var split = sAnswers.split('.');
  
-    // console.log('array of split is now:' + split);
-
     for (let i = 0; i < split.length; i++) {
       // remove the number from the end of each string:
       if (i < split.length -1) {
         split[i] = split[i].substring(0, split[i].length - 2);
       }
-      // console.log('split[' + i + '] is' + split[i]);
     }
-
   }
   
   return (
@@ -288,7 +316,7 @@ export default function ConversationalPrompt({ aiResponse }) {
 
       </div>
 
-      <h3 className='small-heading-prompt'>Questions:</h3>
+      <h3 className='small-heading-prompt'>Question: {currentNumber}/10</h3>
       <div className='response-background-question-prompt'>
         {currentNumber === 0 && (
           <div className='question-display-prompt'>
@@ -327,8 +355,6 @@ export default function ConversationalPrompt({ aiResponse }) {
           <button className='button-submit-prompt' onClick={submitAnswers}>Submit</button>
         )}
       </div>
-      <p>Current Number: {currentNumber}</p>
     </div>
   );
 }
-

@@ -125,7 +125,7 @@ export default function UserInput({ onAiResponse }) {
   };
 
   useEffect(() => {
-    console.log(value);
+    // console.log(value);
   }, [value]);
 
   return (

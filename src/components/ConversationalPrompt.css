@@ -54,6 +54,7 @@
 .ai-response-prompt{
 
     padding: 3px 15px;
+    font-size: 19px
 }
 
 
@@ -124,5 +125,53 @@ label{
 
     background-color: red;
     margin-left: 20%;
+
+}
+
+@media (max-width: 1130px) {
+
+
+    
+    .response-background-question-prompt{
+        
+        height: 40%;
+    }
+
+
+}
+
+
+
+@media (max-height: 730px) {
+
+
+    
+    .response-background-question-prompt{
+        
+        height: 35%;
+    }
+
+
+}
+
+@media (max-width: 430px) {
+
+    .ConversationalPrompt-prompt{
+        top: 0;
+        height: 60%;
+        width: 100%;
+         
+    }
+
+    .response-background-AI-prompt{
+        height: 20%;
+    
+    }
+    
+    .response-background-question-prompt{
+        
+        height: 25%;
+    }
+
 
 }

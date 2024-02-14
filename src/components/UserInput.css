@@ -6,7 +6,7 @@
     top: 0;
     left: 0;
     width: 70%;
-    height: 50%;
+    height: 60%;
 }
 
 .colas-logo-input{
@@ -66,15 +66,15 @@
 
 .old-user-inputs{
 
-    width: 65%;
+    width: 75%;
     height: 60%;
-    max-height: 250px;
     background-color: #3d3e4c;
     margin: auto;
-    margin-top: 4%;
+    margin-top: 3%;
     border-radius: 5px;
     overflow-y: scroll;
     border:2px solid black;
+    font-size: 19px;
 
 }
 
@@ -83,42 +83,9 @@
     padding: 2px 15px
 }
 
-@media (max-width: 1930px){
-
-    .old-user-inputs{
-
-        width: 65%;
-        height: 45%;
-        max-height: 250px;
-        background-color: #3d3e4c;
-        margin: auto;
-        margin-top: 4%;
-
-    }
-
-}
 
 
-@media (max-width: 1830px){
 
-    .old-user-inputs{
-
-        width: 65%;
-        height: 45%;
-        max-height: 250px;
-        background-color: #3d3e4c;
-        margin: auto;
-        margin-top: 4%;
-
-    }
-
-    .icon-input{
-        margin-left: 52%;
-
-    }
-
-
-}
 
 @media (max-width: 1730px){
 

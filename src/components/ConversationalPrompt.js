@@ -166,7 +166,7 @@ import React, { useEffect, useState } from 'react';
 import Global from "../Global"
 
 
-export default function ConversationalPrompt({ aiResponse, onAiResponse }) {
+export default function ConversationalPrompt({onAiResponse, onMultipleChoiceReturn, onProcessType }) {
 
   const [data, setData] = useState([]);
   const [currentNumber, setCurrentNumber] = useState(0);
@@ -184,6 +184,7 @@ export default function ConversationalPrompt({ aiResponse, onAiResponse }) {
   const getNextQuestion = () => {
 
     if (processType) {
+      onProcessType(processType);
       if ((question != null) && (question.IsMultipleChoice === 1)) {
         // make sure they choose a multiple choice question, if so, then continue, otherwise send an alert:
         if (!multipleChoiceReturn) {
@@ -193,6 +194,8 @@ export default function ConversationalPrompt({ aiResponse, onAiResponse }) {
         
         setCurrentNumber(prevNumber => prevNumber + 1);
         Global.answers.push(multipleChoiceReturn);
+       
+        onMultipleChoiceReturn(multipleChoiceReturn);
         sendRequestToAI(question.Description, question.ItemsToAnswer, multipleChoiceReturn, question.AI_Instructions);
         // Reset the selection for the next question
         setMultipleChoiceReturn('');
@@ -205,7 +208,7 @@ export default function ConversationalPrompt({ aiResponse, onAiResponse }) {
     }
   }
 
-  const sendRequestToAI = async (description, itemsToAnswer, selectedOption,  AIinstructions) => {
+  const sendRequestToAI = async (description, itemsToAnswer, selectedOption, AIinstructions) => {
     console.log(description);
     console.log(itemsToAnswer);
     console.log(selectedOption);
@@ -239,10 +242,9 @@ export default function ConversationalPrompt({ aiResponse, onAiResponse }) {
     }
   }
 
-
-
   const storeMultipleChoiceAnswer = (aAnswer) => {
-    setMultipleChoiceReturn(aAnswer);    
+    setMultipleChoiceReturn(aAnswer); 
+ 
   }
 
   
@@ -268,13 +270,15 @@ export default function ConversationalPrompt({ aiResponse, onAiResponse }) {
   }
 
   const submitAnswers = () => {
+
+    setCurrentNumber(prevNumber => prevNumber + 1);
+  
     Global.answers.push(multipleChoiceReturn);
+    onMultipleChoiceReturn(multipleChoiceReturn);
     sendRequestToAI(multipleChoiceReturn);
     for (let i = 0; i < Global.answers.length; i++) {
       console.log('answers[' + i + '] is:' + Global.answers[i])
     }
-    
-    alert('Your answer have been submitted to the database.');
   }
 
 
@@ -305,18 +309,10 @@ export default function ConversationalPrompt({ aiResponse, onAiResponse }) {
     <div className='ConversationalPrompt-prompt'>
       <h2 className='heading-prompt'>AI PROMPTS</h2>
 
-      <h3 className='small-heading-prompt'>AI Generated Response:</h3>
-      <div className='response-background-AI-prompt'>
 
-        {aiResponse && (
-            <div>
-              <p className='ai-response-prompt'>{aiResponse.role} : {aiResponse.content}</p>
-            </div>
-          )}
-
-      </div>
-
-      <h3 className='small-heading-prompt'>Question: {currentNumber}/10</h3>
+      {currentNumber <= 10 && (
+        <h3 className='small-heading-prompt'>Question: {currentNumber}/10</h3>
+      )}
       <div className='response-background-question-prompt'>
         {currentNumber === 0 && (
           <div className='question-display-prompt'>
@@ -337,24 +333,27 @@ export default function ConversationalPrompt({ aiResponse, onAiResponse }) {
         </div>
         )}
 
-        {(question != null) && (question.IsMultipleChoice === 1) && (
+        {(question != null) && (question.IsMultipleChoice === 1) && (currentNumber <= 10) &&(
           <div className='question-display-prompt'>
             <label>{question.Description}</label>
             <div className="Container"> {setButtons(split)}</div>
           </div>
         )}
 
+        {(currentNumber===11) && (
+          <div className='thankyou-display-prompt'>
+            <p>Thank you for your submission! ☺</p>
+          </div>
+        )}
       </div>
 
       {/* <div>{Global.answers[5]}</div> */}
 
-      <div className='div-buttons-prompt'>
-        {currentNumber < 10 ? (
-          <button className='button-next-prompt' onClick={getNextQuestion}>Next</button>
-        ) : (
-          <button className='button-submit-prompt' onClick={submitAnswers}>Submit</button>
-        )}
-      </div>
+      {currentNumber < 10 ? (
+    <button className='button-next-prompt' onClick={getNextQuestion}>Next</button>
+      ) : currentNumber === 10 ? (
+    <button className='button-submit-prompt' onClick={submitAnswers}>Submit</button>
+      ) : null}
     </div>
   );
 }

@@ -1,34 +1,4 @@
 
-// import React, { useState } from 'react';
-// import './App.css';
-// import UserInput from './components/UserInput';
-// import ConversationalPrompt from './components/ConversationalPrompt';
-// import FinalOutput from './components/FinalOutput';
-
-// import './components/UserInput.css';
-// import './components/ConversationalPrompt.css';
-// import './components/FinalOutput.css';
-
-// const App = () => {
-//   const [aiResponse, setAiResponse] = useState(null);
-
-//   const handleAiResponse = (response) => {
-//     setAiResponse(response);
-//   };
-
-//   return (
-//     <div>
-//       <UserInput onAiResponse={handleAiResponse} />
-//       <ConversationalPrompt aiResponse={aiResponse} />
-//       <FinalOutput />
-//     </div>
-//   );
-// }
-
-// export default App;
-
-//-------------------------------------------------------------------------------------------------------
-
 
 import React, { useState, useEffect } from 'react';
 import './App.css';
@@ -43,6 +13,16 @@ import './components/FinalOutput.css';
 const App = () => {
   const [aiResponse, setAiResponse] = useState(null);
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
+  const [multipleChoiceReturn, setMultipleChoiceReturn] = useState('');
+  const [processType, setProcesType] = useState('');
+
+  const handleProcessType = (value) => {
+    setProcesType(value);
+  };
+
+  const handleMultipleChoiceReturn = (value) => {
+    setMultipleChoiceReturn(value);
+  };
 
 
   const handleAiResponse = (response) => {
@@ -65,8 +45,8 @@ const App = () => {
 
   return (
     <div>
-      <UserInput onAiResponse={handleAiResponse} />
-      <ConversationalPrompt aiResponse={aiResponse} onAiResponse={handleAiResponse}/>
+      <UserInput onAiResponse={handleAiResponse} aiResponse={aiResponse} multipleChoiceReturn={multipleChoiceReturn} processType={processType}/>
+      <ConversationalPrompt onAiResponse={handleAiResponse} onMultipleChoiceReturn={handleMultipleChoiceReturn} onProcessType={handleProcessType}/>
       {windowWidth <= 430 ? null : <FinalOutput />}
     </div>
   );

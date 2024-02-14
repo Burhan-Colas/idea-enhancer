@@ -96,9 +96,30 @@ import React, { useState, useEffect } from 'react';
 import logo from './assets/colas_logo.png';
 import idea from './assets/idea_icon.png';
 
-export default function UserInput({ onAiResponse }) {
+export default function UserInput({ onAiResponse, aiResponse, multipleChoiceReturn, processType }) {
   const [value, setValue] = useState('');
   const [userInputs, setUserInputs] = useState([]);
+
+  useEffect(() => {
+    if (aiResponse) {
+      setUserInputs((prevInputs) => [...prevInputs, aiResponse]);
+    }
+  }, [aiResponse]);
+
+  useEffect(() => {
+    if (multipleChoiceReturn !== '') {
+      // If multipleChoiceReturn has a value, add it to userInputs
+      setUserInputs((prevInputs) => [...prevInputs, { role: 'user', content: multipleChoiceReturn }]);
+    }
+  }, [multipleChoiceReturn]);
+
+  useEffect(() => {
+    if (processType !== '') {
+      // If multipleChoiceReturn has a value, add it to userInputs
+      setUserInputs((prevInputs) => [...prevInputs, { role: 'user', content: processType }]);
+    }
+  }, [processType]);
+
 
   const getMessages = async () => {
     const options = {

@@ -1,10 +1,9 @@
 
-
 // import React, { useEffect, useState } from 'react';
 // import Global from "../Global"
 
 
-// export default function ConversationalPrompt({ aiResponse }) {
+// export default function ConversationalPrompt({onAiResponse, onMultipleChoiceReturn, onProcessType }) {
 
 //   const [data, setData] = useState([]);
 //   const [currentNumber, setCurrentNumber] = useState(0);
@@ -22,6 +21,7 @@
 //   const getNextQuestion = () => {
 
 //     if (processType) {
+//       onProcessType(processType);
 //       if ((question != null) && (question.IsMultipleChoice === 1)) {
 //         // make sure they choose a multiple choice question, if so, then continue, otherwise send an alert:
 //         if (!multipleChoiceReturn) {
@@ -31,6 +31,9 @@
         
 //         setCurrentNumber(prevNumber => prevNumber + 1);
 //         Global.answers.push(multipleChoiceReturn);
+       
+//         onMultipleChoiceReturn(multipleChoiceReturn);
+//         sendRequestToAI(question.Description, question.ItemsToAnswer, multipleChoiceReturn, question.AI_Instructions);
 //         // Reset the selection for the next question
 //         setMultipleChoiceReturn('');
 //       }
@@ -42,8 +45,43 @@
 //     }
 //   }
 
+//   const sendRequestToAI = async (description, itemsToAnswer, selectedOption, AIinstructions) => {
+//     console.log(description);
+//     console.log(itemsToAnswer);
+//     console.log(selectedOption);
+//     console.log(AIinstructions);
+//     const options = {
+//       method: 'POST',
+//       body: JSON.stringify({
+//         description: description,
+//         itemsToAnswer: itemsToAnswer,
+//         selectedOption: selectedOption,
+//         AIinstructions: AIinstructions, // Include AI instructions in the request
+//       }),
+//       headers: {
+//         'Content-Type': 'application/json',
+//       },
+//     };
+  
+//     try {
+//       const response = await fetch('http://localhost:8000/completions', options);
+//       const data = await response.json();
+  
+//       // Ensure data.choices is defined before accessing its properties
+//       if (data && data.choices && data.choices.length > 0) {
+//         const aiMessage = data.choices[0].message;
+//         onAiResponse(aiMessage);
+//       } else {
+//         console.error("Invalid response format from the OpenAI API");
+//       }
+//     } catch (error) {
+//       console.error(error);
+//     }
+//   }
+
 //   const storeMultipleChoiceAnswer = (aAnswer) => {
-//     setMultipleChoiceReturn(aAnswer);    
+//     setMultipleChoiceReturn(aAnswer); 
+ 
 //   }
 
   
@@ -69,12 +107,15 @@
 //   }
 
 //   const submitAnswers = () => {
+
+//     setCurrentNumber(prevNumber => prevNumber + 1);
+  
 //     Global.answers.push(multipleChoiceReturn);
+//     onMultipleChoiceReturn(multipleChoiceReturn);
+//     sendRequestToAI(multipleChoiceReturn);
 //     for (let i = 0; i < Global.answers.length; i++) {
 //       console.log('answers[' + i + '] is:' + Global.answers[i])
 //     }
-    
-//     alert('Your answer have been submitted to the database.');
 //   }
 
 
@@ -105,18 +146,10 @@
 //     <div className='ConversationalPrompt-prompt'>
 //       <h2 className='heading-prompt'>AI PROMPTS</h2>
 
-//       <h3 className='small-heading-prompt'>AI Generated Response:</h3>
-//       <div className='response-background-AI-prompt'>
 
-//         {aiResponse && (
-//             <div>
-//               <p className='ai-response-prompt'>{aiResponse.role} : {aiResponse.content}</p>
-//             </div>
-//           )}
-
-//       </div>
-
-//       <h3 className='small-heading-prompt'>Questions:</h3>
+//       {currentNumber <= 10 && (
+//         <h3 className='small-heading-prompt'>Question: {currentNumber}/10</h3>
+//       )}
 //       <div className='response-background-question-prompt'>
 //         {currentNumber === 0 && (
 //           <div className='question-display-prompt'>
@@ -137,31 +170,32 @@
 //         </div>
 //         )}
 
-//         {(question != null) && (question.IsMultipleChoice === 1) && (
+//         {(question != null) && (question.IsMultipleChoice === 1) && (currentNumber <= 10) &&(
 //           <div className='question-display-prompt'>
 //             <label>{question.Description}</label>
 //             <div className="Container"> {setButtons(split)}</div>
 //           </div>
 //         )}
 
+//         {(currentNumber===11) && (
+//           <div className='thankyou-display-prompt'>
+//             <p>Thank you for your submission! ☺</p>
+//           </div>
+//         )}
 //       </div>
 
 //       {/* <div>{Global.answers[5]}</div> */}
 
-//       <div className='div-buttons-prompt'>
-//         {currentNumber < 10 ? (
-//           <button className='button-next-prompt' onClick={getNextQuestion}>Next</button>
-//         ) : (
-//           <button className='button-submit-prompt' onClick={submitAnswers}>Submit</button>
-//         )}
-//       </div>
-//       <p>Current Number: {currentNumber}</p>
+//       {currentNumber < 10 ? (
+//     <button className='button-next-prompt' onClick={getNextQuestion}>Next</button>
+//       ) : currentNumber === 10 ? (
+//     <button className='button-submit-prompt' onClick={submitAnswers}>Submit</button>
+//       ) : null}
 //     </div>
 //   );
 // }
 
-//------------------------------------------------------------------------------------------------
-
+//------------------------------------------------------------------------------------------------------------
 import React, { useEffect, useState } from 'react';
 import Global from "../Global"
 
@@ -173,6 +207,7 @@ export default function ConversationalPrompt({onAiResponse, onMultipleChoiceRetu
   const [processType, setProcessType] = useState('');
   const [question, setQuestion] = useState(null);
   const [multipleChoiceReturn, setMultipleChoiceReturn] = useState('');
+  const [textReturn, setTextReturn] = useState('');
 
   useEffect(() => {
     fetch('http://localhost:8000/')
@@ -182,6 +217,10 @@ export default function ConversationalPrompt({onAiResponse, onMultipleChoiceRetu
   }, []);
 
   const getNextQuestion = () => {
+
+    for (let i = 0; i < Global.answers.length; i++) {
+      console.log('answers[' + i + '] is:' + Global.answers[i])
+    }
 
     if (processType) {
       onProcessType(processType);
@@ -199,6 +238,18 @@ export default function ConversationalPrompt({onAiResponse, onMultipleChoiceRetu
         sendRequestToAI(question.Description, question.ItemsToAnswer, multipleChoiceReturn, question.AI_Instructions);
         // Reset the selection for the next question
         setMultipleChoiceReturn('');
+      }
+        else if ((question != null) && (question.IsMultipleChoice === 0)) {
+        // make sure they enter text into the text field, otherwise, send an alert
+        if (!textReturn) {
+          alert('Please input text into the textbox on the right side of the screen to continue.');
+          return;
+        } 
+        setCurrentNumber(prevNumber => prevNumber + 1);
+        Global.answers.push(textReturn);
+        // Reset the selection for the next question
+        setTextReturn('');
+        
       }
       else {
         setCurrentNumber(prevNumber => prevNumber + 1);
@@ -247,6 +298,10 @@ export default function ConversationalPrompt({onAiResponse, onMultipleChoiceRetu
  
   }
 
+  const storeTextAnswer = (aAnswer) => {
+    setTextReturn(aAnswer);
+  }
+
   
   const setButtons = (aSplit) => {
  
@@ -275,7 +330,7 @@ export default function ConversationalPrompt({onAiResponse, onMultipleChoiceRetu
   
     Global.answers.push(multipleChoiceReturn);
     onMultipleChoiceReturn(multipleChoiceReturn);
-    sendRequestToAI(multipleChoiceReturn);
+    sendRequestToAI(question.Description, question.ItemsToAnswer, multipleChoiceReturn, question.AI_Instructions);
     for (let i = 0; i < Global.answers.length; i++) {
       console.log('answers[' + i + '] is:' + Global.answers[i])
     }
@@ -290,6 +345,7 @@ export default function ConversationalPrompt({onAiResponse, onMultipleChoiceRetu
       }
     }
   }, [data, processType, currentNumber]);
+  
 
   
   if ((question != null) && (question.IsMultipleChoice === 1)) {
@@ -318,10 +374,10 @@ export default function ConversationalPrompt({onAiResponse, onMultipleChoiceRetu
           <div className='question-display-prompt'>
             <label>What is the Process Type of your idea?</label>
             <label>
-              <input type='radio' name='firstQuestion' value='Revenue Generating' onChange={(e) => setProcessType(e.target.value)} /> Revenue Generating
+              <input type='radio' name='firstQuestion' value='Revenue Generating' onChange={(e) => { Global.answers.push(e.target.value); setProcessType(e.target.value);}} /> Revenue Generating
             </label>
             <label>
-              <input type='radio' name='firstQuestion' value='Cost Reduction' onChange={(e) => setProcessType(e.target.value)} /> Cost Reduction
+              <input type='radio' name='firstQuestion' value='Cost Reduction' onChange={(e) => { Global.answers.push(e.target.value); setProcessType(e.target.value);}} /> Cost Reduction
             </label>
           </div>
         )}
@@ -329,7 +385,7 @@ export default function ConversationalPrompt({onAiResponse, onMultipleChoiceRetu
       {(question != null) && (question.IsMultipleChoice === 0) && (
           <div className='question-display-prompt'>
           <label>{question.Description}</label>
-          <textarea className='textarea-answer-prompt' type='text'></textarea>
+          <textarea className='textarea-answer-prompt' type='text' value={textReturn}  onChange={(e) => storeTextAnswer(e.target.value)}></textarea>
         </div>
         )}
 
@@ -346,8 +402,6 @@ export default function ConversationalPrompt({onAiResponse, onMultipleChoiceRetu
           </div>
         )}
       </div>
-
-      {/* <div>{Global.answers[5]}</div> */}
 
       {currentNumber < 10 ? (
     <button className='button-next-prompt' onClick={getNextQuestion}>Next</button>

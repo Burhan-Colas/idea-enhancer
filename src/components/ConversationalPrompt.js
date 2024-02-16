@@ -224,6 +224,7 @@ export default function ConversationalPrompt({onAiResponse, onMultipleChoiceRetu
 
     if (processType) {
       onProcessType(processType);
+      
       if ((question != null) && (question.IsMultipleChoice === 1)) {
         // make sure they choose a multiple choice question, if so, then continue, otherwise send an alert:
         if (!multipleChoiceReturn) {
@@ -247,6 +248,7 @@ export default function ConversationalPrompt({onAiResponse, onMultipleChoiceRetu
         } 
         setCurrentNumber(prevNumber => prevNumber + 1);
         Global.answers.push(textReturn);
+        sendRequestToAI(question.Description, question.ItemsToAnswer, textReturn, question.AI_Instructions);
         // Reset the selection for the next question
         setTextReturn('');
         
@@ -320,7 +322,6 @@ export default function ConversationalPrompt({onAiResponse, onMultipleChoiceRetu
       );
     }
     
-  
     return <div>{buttonsText}</div>
   }
 
